@@ -1,14 +1,19 @@
 ---
-title: "My Final Project Template"
-author: Your name here
-subtitle: Subtitle here if desired
+title: "How landscape habitat influences wild eastern turkey populations with New York State"
+author: Marissa Zimmer 
+
 ---
+library(raster)
+library(sf)
+library(tigris)
+
+
 
 # Introduction
 
-[~ 200 words]
+New York State’s (NYS) wild turkey population constitutes a significant part of conservation concerns and support for the hunting community within NYS. In the early 1950s, the Department of Conservation  (NYSDEC) helped restore and repopulate NYS's wild turkey populations. The NYSDEC also partnered with the National Wild Turkey Federation and SUNY Environmental Science and Forestry college in 2010 to research the impact of weather patterns and hunting zones on turkey populations. The results of this study have not been published at this time. The aim of this project is to research, gather and compare data that involves understanding and explaining how land cover and tree canopy cover can affect wild turkey population levels. Within NYS many individuals have noticed seeing less wild turkeys than in years past and changing habitat factors in localized areas may be one factor affecting population levels. By looking at land cover and tree canopy cover the aim of this project is to see if areas with less suitable land cover and tree canopy cover correlates to areas of lower population levels. If the results of this study come back to support this hypothesis then there is room for continued research into habitat suitability within NYS for wild turkey populations. 
 
-Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.
+
 
 # Materials and methods
 
