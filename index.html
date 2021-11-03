@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Your name here" />
+
+
+<title>My Final Project Template</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Spatial Data Science Final Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">My Final Project Template</h1>
+<h3 class="subtitle">Subtitle here if desired</h3>
+<h4 class="author">Your name here</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>[~ 200 words]</p>
+<p>Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way.</p>
+</div>
+<div id="materials-and-methods" class="section level1">
+<h1>Materials and methods</h1>
+<p>[~ 200 words]</p>
+<p>Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.</p>
+<p>Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.</p>
+<p>Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.</p>
+<p>You can do bullets like this:</p>
+<ul>
+<li>The first most important thing</li>
+<li>The second most important thing</li>
+<li>The third most important thing</li>
+</ul>
+<p>You can do numbers like this:</p>
+<ol style="list-style-type: decimal">
+<li>The first most important thing</li>
+<li>The second most important thing</li>
+<li>The third most important thing</li>
+</ol>
+<p>See <a href="http://rmarkdown.rstudio.com/">http://rmarkdown.rstudio.com/</a> for all the amazing things you can do.</p>
+<p>Here’s my first code chunk.</p>
+<pre class="r"><code>1+2</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>Load any required packages in a code chunk (you may need to install some packages):</p>
+<pre class="r"><code>library(tidyverse)
+library(leaflet)
+library(kableExtra)
+knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling</code></pre>
+<div id="download-and-clean-all-required-data" class="section level2">
+<h2>Download and clean all required data</h2>
+<pre class="r"><code>n=20
+data=data.frame(x=runif(n,-180,180),
+                y=runif(n,-60,60),
+                size = runif(n, 5, 20),
+                category = factor(
+                  sample(letters[1:5], n, replace = TRUE)
+                  ),
+                value = rnorm(n))</code></pre>
+<pre class="r"><code>data %&gt;% 
+  slice(1:10) %&gt;% #show only 1:n rows
+  kable(digits=2,align=&quot;c&quot;)%&gt;% #make table and round to two digits
+  kable_styling(bootstrap_options = 
+                  c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;)) #apply other formatting</code></pre>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+x
+</th>
+<th style="text-align:center;">
+y
+</th>
+<th style="text-align:center;">
+size
+</th>
+<th style="text-align:center;">
+category
+</th>
+<th style="text-align:center;">
+value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+46.77
+</td>
+<td style="text-align:center;">
+25.31
+</td>
+<td style="text-align:center;">
+10.01
+</td>
+<td style="text-align:center;">
+e
+</td>
+<td style="text-align:center;">
+0.06
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+-8.52
+</td>
+<td style="text-align:center;">
+51.05
+</td>
+<td style="text-align:center;">
+17.30
+</td>
+<td style="text-align:center;">
+e
+</td>
+<td style="text-align:center;">
+1.44
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+37.22
+</td>
+<td style="text-align:center;">
+56.17
+</td>
+<td style="text-align:center;">
+14.28
+</td>
+<td style="text-align:center;">
+c
+</td>
+<td style="text-align:center;">
+-1.34
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+41.77
+</td>
+<td style="text-align:center;">
+7.04
+</td>
+<td style="text-align:center;">
+17.31
+</td>
+<td style="text-align:center;">
+e
+</td>
+<td style="text-align:center;">
+-0.31
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+-76.34
+</td>
+<td style="text-align:center;">
+46.90
+</td>
+<td style="text-align:center;">
+18.21
+</td>
+<td style="text-align:center;">
+e
+</td>
+<td style="text-align:center;">
+1.31
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+-2.04
+</td>
+<td style="text-align:center;">
+-13.95
+</td>
+<td style="text-align:center;">
+11.93
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+-0.87
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+67.83
+</td>
+<td style="text-align:center;">
+-24.70
+</td>
+<td style="text-align:center;">
+11.15
+</td>
+<td style="text-align:center;">
+a
+</td>
+<td style="text-align:center;">
+-0.04
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+117.15
+</td>
+<td style="text-align:center;">
+-16.61
+</td>
+<td style="text-align:center;">
+9.82
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+0.67
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+-177.74
+</td>
+<td style="text-align:center;">
+-7.29
+</td>
+<td style="text-align:center;">
+19.42
+</td>
+<td style="text-align:center;">
+d
+</td>
+<td style="text-align:center;">
+-0.19
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+-72.05
+</td>
+<td style="text-align:center;">
+-56.47
+</td>
+<td style="text-align:center;">
+10.68
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+1.30
+</td>
+</tr>
+</tbody>
+</table>
+<p>Add any additional processing steps here.</p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<p>[~200 words]</p>
+<p>Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.</p>
+<p>Show tables, plots, etc. and describe them.</p>
+<pre class="r"><code>m &lt;- leaflet(data) %&gt;% 
+  addTiles() %&gt;% 
+  addCircleMarkers(~x, ~y, radius = ~size,color = ~as.factor(category)) %&gt;% 
+  addPopups(~x[2], ~y[2], &quot;Random popup&quot;)
+m  # a map with the default OSM tile layer</code></pre>
+<div class="figure">
+<div id="htmlwidget-dfda99590bd526fe4772" style="width:576px;height:288px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dfda99590bd526fe4772">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addCircleMarkers","args":[[25.3079088125378,51.0496956389397,56.1654704064131,7.03703261911869,46.8953758198768,-13.9509438537061,-24.7007801011205,-16.612907582894,-7.29292460717261,-56.4703240804374,-44.1519907582551,19.8205579910427,-3.68484416976571,-56.4578295126557,-7.76187795214355,48.9289039839059,49.1369145456702,7.28856978937984,52.3286233004183,3.41434791684151],[46.7658593785018,-8.52346823550761,37.2226198017597,41.7728906683624,-76.337556252256,-2.04148543998599,67.8336450085044,117.149192746729,-177.740770317614,-72.0532563328743,137.632139967754,-52.2364073898643,-37.1263937093318,-179.506095517427,-177.124058296904,88.3600979112089,-144.634207282215,32.3341020103544,-178.200534973294,-80.9354426991194],[10.0111754541285,17.2989390860312,14.2816084122751,17.3102322441991,18.2113785855472,11.9296544115059,11.1505134182516,9.81794045190327,19.4159607356414,10.6762659794185,10.8191082777921,6.22232326888479,13.2567734865006,18.5549710970372,12.6692194037605,16.8490843090694,10.1413023599889,10.6909484579228,14.0606431581546,19.8234628350474],null,null,{"interactive":true,"className":"","stroke":true,"color":["e","e","c","e","e","b","a","b","d","b","e","b","d","e","d","a","e","d","d","d"],"weight":5,"opacity":0.5,"fill":true,"fillColor":["e","e","c","e","e","b","a","b","d","b","e","b","d","e","d","a","e","d","d","d"],"fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addPopups","args":[51.0496956389397,-8.52346823550761,"Random popup",null,null,{"maxWidth":300,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"className":""}]}],"limits":{"lat":[-56.4703240804374,56.1654704064131],"lng":[-179.506095517427,137.632139967754]}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Map of completely random data
+</p>
+</div>
+<pre class="r"><code>data %&gt;% 
+  ggplot(aes(x=x,y=y,col=category))+
+  geom_point()</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="conclusions" class="section level1">
+<h1>Conclusions</h1>
+<p>[~200 words]</p>
+<p>Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>All sources are cited in a consistent manner</p>
+</div>
+
+<!-- give the footer some space -->
+<br/>
+<br/>
+
+<footer id="site-footer">
+  <div id="footer1">
+  This website is a project for Adam Wilson's <a href="https://wilsonlab.io/GEO511"><i> Spatial Data Science (GEO511) </i></a>Course at the University at Buffalo
+  </div>
+  <div id="footer2">
+  <a rel="license" property="http://creativecommons.org/ns#license"
+  href="http://creativecommons.org/licenses/by/4.0/" ><img src="img/cc-by.svg" alt="cc-by"/></a> 
+  </div>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+
+</body>
+</html>
