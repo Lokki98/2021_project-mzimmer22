@@ -3,11 +3,6 @@ title: "How landscape habitat influences wild eastern turkey populations with Ne
 author: Marissa Zimmer 
 
 ---
-library(raster)
-library(sf)
-library(tigris)
-
-
 
 # Introduction
 
@@ -19,23 +14,18 @@ New York State’s (NYS) wild turkey population constitutes a significant part o
 
 [~ 200 words]
 
-Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
+Narrative: For this project there were four environmental factors that were used; landcover, treecover, elevation, and precipitation.
 
-Code: The code associated with the project is well organized and easy to follow. Demonstrates mastery of R graphics and functions.
-
-Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
+*Landcover-USGS 
+*Treecover-Global Forest Watch
+*Elevation-Dr. Williams 
+*Precipitation-PRISM 
 
 You can do bullets like this:
 
 * The first most important thing
 * The second most important thing
 * The third most important thing
-
-You can do numbers like this:
-
-1. The first most important thing
-2. The second most important thing
-3. The third most important thing
 
 See [http://rmarkdown.rstudio.com/](http://rmarkdown.rstudio.com/) for all the amazing things you can do.
 
@@ -48,33 +38,61 @@ Here's my first code chunk.
 Load any required packages in a code chunk (you may need to install some packages):
 
 ```{r, message=F, warning=F}
-library(tidyverse)
-library(leaflet)
-library(kableExtra)
-knitr::opts_chunk$set(cache=TRUE)  # cache the results for quick compiling
+library(raster)
+library(sf)
+library(tigris)
+library(rasterVis)
+library(rgdal)
+
+
+options(tigris_use_cache = TRUE)
+  # cache the results for quick compiling
 ```
 
 ## Download and clean all required data
-```{r}
-n=20
-data=data.frame(x=runif(n,-180,180),
-                y=runif(n,-60,60),
-                size = runif(n, 5, 20),
-                category = factor(
-                  sample(letters[1:5], n, replace = TRUE)
-                  ),
-                value = rnorm(n))
-```
 
-```{r, results='asis'}
-data %>% 
-  slice(1:10) %>% #show only 1:n rows
-  kable(digits=2,align="c")%>% #make table and round to two digits
-  kable_styling(bootstrap_options = 
-                  c("striped", "hover", "condensed", "responsive")) #apply other formatting
-```
+land_cover = raster ("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/landcover_crop.asc")
 
-Add any additional processing steps here.
+tree_cover = raster("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/Hansen_GFC-2019-v1.7_treecover2000_50N_080W (1).tif")
+
+precip_cover = raster("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/PRISM_ppt_stable_4kmM3_2020_asc.asc")
+
+elevation_cover = raster ("C:/Users/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/elevation.tif")
+
+
+#Getting all environmental factors on the same resolution, extent: lat/long, crs:4326
+
+ny_counties <-counties(state = "NY", cb = FALSE,
+                       resolution = "500k", year = 2020) %>%
+                        st_union() %>%
+                         st_transform(crs=projection(land_cover))
+
+land_coverny= crop(land_cover, as(ny_counties, "Spatial"))
+
+tree_coverny = crop(tree_cover, 
+                    as(st_transform(ny_counties,st_crs(tree_cover)), "Spatial"))#%>%
+
+tree_coverny2 = projectRaster(tree_coverny, to=land_coverny,method="ngb")
+
+elevation_coverny= crop(elevation_cover,
+                   as(st_transform(ny_counties,st_crs(elevation_cover)), "Spatial"))#%>%
+
+elevation_coverny2 = projectRaster(elevation_coverny,to=land_coverny, method = "ngb")
+
+precip_coverny = crop(precip_cover, 
+                      as(st_transform(ny_counties,st_crs(precip_cover)), "Spatial"))#%>%
+
+precip_coverny2 = projectRaster(precip_cover, to=land_coverny,method="ngb")
+
+#masking, stacking, creating my map.
+
+extent_1 = extent(land_coverny)
+precip_cover = crop(precip_cover, extent_1)
+tree_coverny2 = crop(tree_coverny2, extent_1)
+elevation_coverny2 = crop(elevation_coverny2, extent_1)
+
+stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)
+plot(stack_1)
 
 # Results
 
