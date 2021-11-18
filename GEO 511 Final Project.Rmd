@@ -1,6 +1,8 @@
 ---
 title: "How landscape habitat influences wild eastern turkey populations within New York State"
 author: Marissa Zimmer 
+output:
+    html_document
 
 ---
 
