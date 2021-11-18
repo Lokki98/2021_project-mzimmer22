@@ -1,5 +1,5 @@
 ---
-title: "How landscape habitat influences wild eastern turkey populations with New York State"
+title: "How landscape habitat influences wild eastern turkey populations within New York State"
 author: Marissa Zimmer 
 
 ---
@@ -12,7 +12,6 @@ New York State’s (NYS) wild turkey population constitutes a significant part o
 
 # Materials and methods
 
-[~ 200 words]
 
 Narrative: For this project there were four environmental factors that were used; landcover, treecover, elevation, and precipitation.
 
@@ -21,11 +20,7 @@ Narrative: For this project there were four environmental factors that were used
 *Elevation-Dr. Williams 
 *Precipitation-PRISM 
 
-You can do bullets like this:
 
-* The first most important thing
-* The second most important thing
-* The third most important thing
 
 See [http://rmarkdown.rstudio.com/](http://rmarkdown.rstudio.com/) for all the amazing things you can do.
 
@@ -96,7 +91,6 @@ plot(stack_1)
 
 # Results
 
-[~200 words]
 
 Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.
 
