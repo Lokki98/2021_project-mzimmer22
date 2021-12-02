@@ -2,8 +2,8 @@
 title: "How landscape habitat influences wild eastern turkey populations within New York State"
 author: Marissa Zimmer 
 output:
-  prettydoc::html_pretty:
-    theme: cayman
+    html_document
+
 ---
 
 # Introduction
@@ -16,7 +16,7 @@ The aim of this project is to research, gather and compare data that involves un
 
 # Materials and methods
 
-For this project it was important to highlight the key environmental variables that affect wild turkey populations within New York State. The first environmental variable that was used was landcover from the U.S. Geological Survey (USGS). Specifically, the landcover data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer). The USGS seperated the land cover data into tiles on a world map which can be selected by grid. For this project I was able to select a grid tile that included NY. The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis & Discovery. The global tree cover data are per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover from cloud-free annual growing season composite Landset 7 ETM + data. A median from the annual tree canopy cover cover values from 2009-2011 were used to estimate the 2010 tree cover. Like the Landcover data the tree cover canopy data was chosen from a grid style map with a spatial resoultion of 1 arc-second per pixel, approximately 30 m per pixel. The next environmental variable that was selected was elevation. 
+For this project it was important to highlight the key environmental variables that affect wild turkey populations within New York State. The first environmental variable that was used was landcover from the U.S. Geological Survey (USGS). Specifically, the landcover data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer). The USGS seperated the land cover data into tiles on a world map which can be selected by grid. For this project I was able to select a grid tile that included NY. The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis & Discovery. The global tree cover data are per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover from cloud-free annual growing season composite Landset 7 ETM + data. A median from the annual tree canopy cover cover values from 2009-2011 were used to estimate the 2010 tree cover. Like the Landcover data the tree cover canopy data was chosen from a grid style map with a spatila resoultion of 1 arc-second per pixel, approximately 30 m per pixel. The next environmental variable that was selected was elevation. 
 
 
 *Elevation-Dr. Williams 
@@ -24,11 +24,10 @@ For this project it was important to highlight the key environmental variables t
 *Precipitation-PRISM 
 
 
-# Step 1: Loading the required packages 
+##Data
 
-
+#Part 1: Required Packages 
 ```{r, message=F, warning=F}
-
 library(raster)
 library(sf)
 library(tigris)
@@ -36,51 +35,41 @@ library(rasterVis)
 library(rgdal)
 library(dismo)
 library(ggplot2)
-library(prettydoc)
 
 # cache the results for quick compiling
 options(tigris_use_cache = TRUE)
  
 ```
 
+#Wild Turkey Occurance and Environmental variables used 
+```{r}
 
-# Step 2: The Data
-
-```{r, message=F, warning=F}
 ebird_data <-read.csv(file = "C:/Users/maris/OneDrive/Desktop/maxent_turkey3.csv")
 
 #Landcover from Dr. Williams 
 land_cover = raster ("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/landcover_crop.asc")
 crs(land_cover)=4326
 
-
 #Treecover from Global Forest Watch
-tree_cover = raster("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/Hansen_GFC-2019-v1.7_treecover2000_50N_080W.tif")
-
+tree_cover = raster("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/Hansen_GFC-2019-v1.7_treecover2000_50N_080W (1).tif")
+tree_cover
 
 #Precipitation data from PRISM 
 precip_cover = raster("C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/PRISM_ppt_stable_4kmM3_2020_asc.asc")
 crs(precip_cover)=4326
 
-
 #Elevation data from Dr. Williams 
 elevation_cover = raster ("C:/Users/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/elevation.tif")
-
-```
-
-let's take a quick look at all four environmental layers 
-
-```{r, message=F, warning=F}
-land_cover
-tree_cover
-precip_cover
 elevation_cover
-```
 
-Now we need to make all the layers talk to each other 
-I chose to have each layer contain the same properties as the landcover data 
+#population data from Dr. Williams 
+pop_cover= raster ("C:/Users/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/population.asc")
+crs(pop_cover)=4326
+pop_cover
 
-```{r, message=F, warning=F}
+
+#Getting all environmental factors on the same resolution, extent: lat/long, crs:4326
+
 ny_counties <-counties(state = "NY", cb = FALSE,
                        resolution = "500k", year = 2020) %>%
                         st_union() %>%
@@ -108,69 +97,49 @@ precip_coverny = crop(precip_cover,
 
 precip_coverny2 = projectRaster(precip_cover, to=land_coverny,method="ngb")
 
-#extent time
+
+
+#masking, stacking, creating my map.
 
 extent_1 = extent(land_coverny)
 precip_cover = crop(precip_cover, extent_1)
 tree_coverny2 = crop(tree_coverny2, extent_1)
 elevation_coverny2 = crop(elevation_coverny2, extent_1)
-```
 
-Let's relook at all of the environmental layers again and make sure they match:
 
-```{r, message=F, warning=F}
-land_coverny
-tree_coverny2
-precip_coverny2
-elevation_coverny2
-```
 
-Let's now check and see how each layer plots, including the ebird data
-```{r, message=F, warning=F}
-plot(ebird_data)
-plot(land_coverny)
-plot(tree_coverny2)
-plot(precip_coverny2)
-plot(elevation_coverny2)
 
-```
-
-Time to stack now that each layer:
-
-```{r, message=F, warning=F}
 stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%>%
   mask(mask=as(ny_counties, "Spatial"))
-```
+plot(stack_1)
 
+# Dismo Package 
 
-# Step 3: 
-```{r, message=F, warning=F}
-
+#variables needed to make a prediction map
 
 all_data <-bioclim(stack_1, ebird_data)
 stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%>%
   mask(mask=as(ny_counties, "Spatial"))
 e <-extent(-79.7625, -71.77917, 40.475, 45.01667)
 
+# Plotting the Prediction 
 data_predict <-predict(all_data, stack_1, progess='text', ext=e)
-
-
-
-```
-
-# Results
-```{r, message=F, warning=F}
-plot(stack_1)
-
 plot(data_predict)
+
+#using gplot 
 
 gplot(data_predict) + geom_tile(aes(fill = value)) +
   facet_wrap(~ variable) +
   scale_fill_gradient(low = 'white', high = 'red') +
   coord_equal()
 
+
 ```
 
+# Results
+
+
+Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.
 
 
 # Conclusions
