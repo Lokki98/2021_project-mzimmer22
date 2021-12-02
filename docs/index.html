@@ -17,7 +17,7 @@
 <script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -348,9 +348,7 @@ div.tocify {
 </div>
 <div id="materials-and-methods" class="section level1">
 <h1>Materials and methods</h1>
-<p>For this project it was important to highlight the key environmental variables that affect wild turkey populations within New York State. The first environmental variable that was used was landcover from the U.S. Geological Survey (USGS). Specifically, the landcover data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer). The USGS seperated the land cover data into tiles on a world map which can be selected by grid. For this project I was able to select a grid tile that included NY. The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis &amp; Discovery. The global tree cover data are per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover from cloud-free annual growing season composite Landset 7 ETM + data. A median from the annual tree canopy cover cover values from 2009-2011 were used to estimate the 2010 tree cover. Like the Landcover data the tree cover canopy data was chosen from a grid style map with a spatial resoultion of 1 arc-second per pixel, approximately 30 m per pixel. The next environmental variable that was selected was elevation.</p>
-<p>*Elevation-Dr. Williams</p>
-<p>*Precipitation-PRISM</p>
+<p>For this project it was important to highlight the key environmental variables that affect wild turkey populations within New York State. Two of the environmental variables that were used, landcover and elevation were taken from the U.S. Geological Survey (USGS). Specifically, the data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer) from several raster and vector sources of information. The USGS seperated the data into tiles on a world map which can be selected by grid. The data for elevation was completed in 1996 and was developed over a three year period. For this project I was able to select a grid tile that included NY. The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis &amp; Discovery. The global tree cover data are per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover from cloud-free annual growing season composite Landset 7 ETM + data. A median from the annual tree canopy cover cover values from 2009-2011 were used to estimate the 2010 tree cover. Like the Landcover data the tree cover canopy data was chosen from a grid style map with a spatial resoultion of 1 arc-second per pixel, approximately 30 m per pixel. The last environmental variable, precipitation was taken from the PRISM Climate Group from Oregon State University. I selected the temporal period May of 2020. The month of May was chosen based on wild eastern Turkeys breeding times. During the month of May their breeding and nesting behaviors peak.</p>
 </div>
 <div id="step-1-loading-the-required-packages" class="section level1">
 <h1>Step 1: Loading the required packages</h1>
@@ -361,7 +359,7 @@ library(rasterVis)
 library(rgdal)
 library(dismo)
 library(ggplot2)
-library(prettydoc)
+library(viridis)
 
 # cache the results for quick compiling
 options(tigris_use_cache = TRUE)</code></pre>
@@ -462,7 +460,7 @@ elevation_coverny2 = crop(elevation_coverny2, extent_1)</code></pre>
 ## resolution : 0.004166667, 0.004166667  (x, y)
 ## extent     : -79.7625, -71.77917, 40.475, 45.01667  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : r_tmp_2021-12-01_170948_20252_89067.grd 
+## source     : memory
 ## names      : landcover_crop 
 ## values     : 0, 16  (min, max)</code></pre>
 <pre class="r"><code>tree_coverny2</code></pre>
@@ -518,25 +516,27 @@ data_predict &lt;-predict(all_data, stack_1, progess=&#39;text&#39;, ext=e)</cod
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
+<p>The first plot shows how each environmental layer is now properly cropped within NYS</p>
 <pre class="r"><code>plot(stack_1)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The Second plot combines all environmental variables and occurnace data taken from ebird</p>
 <pre class="r"><code>plot(data_predict)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The third and final plot is a more defined version of the second plot.</p>
 <pre class="r"><code>gplot(data_predict) + geom_tile(aes(fill = value)) +
   facet_wrap(~ variable) +
-  scale_fill_gradient(low = &#39;white&#39;, high = &#39;red&#39;) +
-  coord_equal()</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
+  scale_fill_viridis(option=&quot;turbo&quot;) +
+  coord_equal()+ ylab(&quot;Latitude&quot;)+ xlab(&quot;Longitude&quot;)+ggtitle(&quot;How Environmental Variables effect Turkey populations within NYS&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
-<p>[~200 words]</p>
-<p>Clear summary adequately describing the results and putting them in context. Discussion of further questions and ways to continue investigation.</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
 <p>“Global Forest Change 2000–2020data Download.” Global Forest Change, <a href="https://storage.googleapis.com/earthenginepartners-hansen/GFC-2020-v1.8/download.html" class="uri">https://storage.googleapis.com/earthenginepartners-hansen/GFC-2020-v1.8/download.html</a>.</p>
 <p>PRISM Climate Group, Oregon State U. (n.d.). Prism.oregonstate.edu. <a href="https://prism.oregonstate.edu/recent/monthly.php" class="uri">https://prism.oregonstate.edu/recent/monthly.php</a></p>
+<p>USGS (1997) USGS 30 ARC-second Global Elevation Data, GTOPO30. (ed. C.a.I.S.L. Research Data Archive at the National Center for Atmospheric Research).</p>
 </div>
 
 <!-- give the footer some space -->
