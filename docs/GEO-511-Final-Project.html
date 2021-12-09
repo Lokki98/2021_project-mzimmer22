@@ -351,8 +351,7 @@ div.tocify {
 <p>For this project it was important to highlight the key environmental variables that affect wild turkey populations within New York State. The first environmental variable that was used was landcover from the U.S. Geological Survey (USGS). Specifically, the landcover data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer). The USGS seperated the land cover data into tiles on a world map which can be selected by grid. For this project I was able to select a grid tile that included NY. The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis &amp; Discovery. The global tree cover data are per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover from cloud-free annual growing season composite Landset 7 ETM + data. A median from the annual tree canopy cover cover values from 2009-2011 were used to estimate the 2010 tree cover. Like the Landcover data the tree cover canopy data was chosen from a grid style map with a spatial resoultion of 1 arc-second per pixel, approximately 30 m per pixel. The next environmental variable that was selected was elevation.</p>
 <p>*Elevation-Dr. Williams</p>
 <p>*Precipitation-PRISM</p>
-<p>##Data</p>
-<p>#Part 1: Required Packages</p>
+<p>#Step 1: Loading the required packages</p>
 <pre class="r"><code>library(raster)
 library(sf)
 library(tigris)
@@ -363,31 +362,37 @@ library(ggplot2)
 
 # cache the results for quick compiling
 options(tigris_use_cache = TRUE)</code></pre>
-<p>#Wild Turkey Occurance and Environmental variables used</p>
+</div>
+<div id="step-2-the-data" class="section level1">
+<h1>Step 2: The Data</h1>
 <pre class="r"><code>ebird_data &lt;-read.csv(file = &quot;C:/Users/maris/OneDrive/Desktop/maxent_turkey3.csv&quot;)
 
 #Landcover from Dr. Williams 
 land_cover = raster (&quot;C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/landcover_crop.asc&quot;)
 crs(land_cover)=4326
 
+
 #Treecover from Global Forest Watch
 tree_cover = raster(&quot;C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/Hansen_GFC-2019-v1.7_treecover2000_50N_080W.tif&quot;)
-tree_cover</code></pre>
-<pre><code>## class      : RasterLayer 
-## dimensions : 40000, 40000, 1.6e+09  (nrow, ncol, ncell)
-## resolution : 0.00025, 0.00025  (x, y)
-## extent     : -80, -70, 40, 50  (xmin, xmax, ymin, ymax)
-## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : Hansen_GFC-2019-v1.7_treecover2000_50N_080W.tif 
-## names      : Hansen_GFC.2019.v1.7_treecover2000_50N_080W 
-## values     : 0, 255  (min, max)</code></pre>
-<pre class="r"><code>#Precipitation data from PRISM 
+
+
+#Precipitation data from PRISM 
 precip_cover = raster(&quot;C:/USers/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/PRISM_ppt_stable_4kmM3_2020_asc.asc&quot;)
 crs(precip_cover)=4326
 
+
 #Elevation data from Dr. Williams 
-elevation_cover = raster (&quot;C:/Users/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/Hansen_GFC-2019-v1.7_treecover2000_50N_080W.tif&quot;)
-elevation_cover</code></pre>
+elevation_cover = raster (&quot;C:/Users/maris/OneDrive/Desktop/Environmental Factor for Turkey Project/elevation.tif&quot;)</code></pre>
+<p>let’s take a quick look at all four environmental layers</p>
+<pre class="r"><code>land_cover</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 9119, 12478, 113786882  (nrow, ncol, ncell)
+## resolution : 0.004166667, 0.004166667  (x, y)
+## extent     : -113, -61.00833, 20.00833, 58.00417  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : landcover_crop.asc 
+## names      : landcover_crop</code></pre>
+<pre class="r"><code>tree_cover</code></pre>
 <pre><code>## class      : RasterLayer 
 ## dimensions : 40000, 40000, 1.6e+09  (nrow, ncol, ncell)
 ## resolution : 0.00025, 0.00025  (x, y)
@@ -396,7 +401,24 @@ elevation_cover</code></pre>
 ## source     : Hansen_GFC-2019-v1.7_treecover2000_50N_080W.tif 
 ## names      : Hansen_GFC.2019.v1.7_treecover2000_50N_080W 
 ## values     : 0, 255  (min, max)</code></pre>
-<p>#Getting all environmental factors ready to stack</p>
+<pre class="r"><code>precip_cover</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 621, 1405, 872505  (nrow, ncol, ncell)
+## resolution : 0.04166667, 0.04166667  (x, y)
+## extent     : -125.0208, -66.47917, 24.0625, 49.9375  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : PRISM_ppt_stable_4kmM3_2020_asc.asc 
+## names      : PRISM_ppt_stable_4kmM3_2020_asc</code></pre>
+<pre class="r"><code>elevation_cover</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 12000, 9600, 115200000  (nrow, ncol, ncell)
+## resolution : 0.008333333, 0.008333333  (x, y)
+## extent     : -140, -60, -10, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : elevation.tif 
+## names      : elevation 
+## values     : -79, 6710  (min, max)</code></pre>
+<p>Now we need to make all the layers talk to each other I chose to have each layer contain the same properties as the landcover data</p>
 <pre class="r"><code>ny_counties &lt;-counties(state = &quot;NY&quot;, cb = FALSE,
                        resolution = &quot;500k&quot;, year = 2020) %&gt;%
                         st_union() %&gt;%
@@ -422,43 +444,86 @@ elevation_coverny2 = projectRaster(elevation_coverny,to=land_coverny, method = &
 precip_coverny = crop(precip_cover, 
                       as(st_transform(ny_counties,st_crs(precip_cover)), &quot;Spatial&quot;))#%&gt;%
 
-precip_coverny2 = projectRaster(precip_cover, to=land_coverny,method=&quot;ngb&quot;)</code></pre>
-<p>#masking and stacking all environmental variables</p>
-<pre class="r"><code>extent_1 = extent(land_coverny)
+precip_coverny2 = projectRaster(precip_cover, to=land_coverny,method=&quot;ngb&quot;)
+
+#extent time
+
+extent_1 = extent(land_coverny)
 precip_cover = crop(precip_cover, extent_1)
 tree_coverny2 = crop(tree_coverny2, extent_1)
-elevation_coverny2 = crop(elevation_coverny2, extent_1)
-
-
-
-
-stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%&gt;%
-  mask(mask=as(ny_counties, &quot;Spatial&quot;))
-plot(stack_1)</code></pre>
-<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+elevation_coverny2 = crop(elevation_coverny2, extent_1)</code></pre>
+<p>Let’s relook at all of the environmental layers again and make sure they match:</p>
+<pre class="r"><code>land_coverny</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 1090, 1916, 2088440  (nrow, ncol, ncell)
+## resolution : 0.004166667, 0.004166667  (x, y)
+## extent     : -79.7625, -71.77917, 40.475, 45.01667  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : r_tmp_2021-12-09_093413_12128_33008.grd 
+## names      : landcover_crop 
+## values     : 0, 16  (min, max)</code></pre>
+<pre class="r"><code>tree_coverny2</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 1090, 1916, 2088440  (nrow, ncol, ncell)
+## resolution : 0.004166667, 0.004166667  (x, y)
+## extent     : -79.7625, -71.77917, 40.475, 45.01667  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : memory
+## names      : Hansen_GFC.2019.v1.7_treecover2000_50N_080W 
+## values     : 0, 100  (min, max)</code></pre>
+<pre class="r"><code>precip_coverny2</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 1090, 1916, 2088440  (nrow, ncol, ncell)
+## resolution : 0.004166667, 0.004166667  (x, y)
+## extent     : -79.7625, -71.77917, 40.475, 45.01667  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : memory
+## names      : PRISM_ppt_stable_4kmM3_2020_asc 
+## values     : 643.24, 1809.52  (min, max)</code></pre>
+<pre class="r"><code>elevation_coverny2</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 1090, 1916, 2088440  (nrow, ncol, ncell)
+## resolution : 0.004166667, 0.004166667  (x, y)
+## extent     : -79.7625, -71.77917, 40.475, 45.01667  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : memory
+## names      : elevation 
+## values     : 1, 1568  (min, max)</code></pre>
+<p>Let’s now check and see how each layer plots, including the ebird data</p>
+<pre class="r"><code>plot(ebird_data)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>plot(land_coverny)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<pre class="r"><code>plot(tree_coverny2)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
+<pre class="r"><code>plot(precip_coverny2)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-6-4.png" width="672" /></p>
+<pre class="r"><code>plot(elevation_coverny2)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-6-5.png" width="672" /></p>
+<p>Time to stack now that each layer:</p>
+<pre class="r"><code>stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%&gt;%
+  mask(mask=as(ny_counties, &quot;Spatial&quot;))</code></pre>
 </div>
-<div id="using-the-dismo-package-to-combine-occurance-and-environmental-data" class="section level1">
-<h1>Using the Dismo package to combine occurance and environmental data</h1>
+<div id="step-3" class="section level1">
+<h1>Step 3:</h1>
 <pre class="r"><code>all_data &lt;-bioclim(stack_1, ebird_data)
 stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%&gt;%
   mask(mask=as(ny_counties, &quot;Spatial&quot;))
 e &lt;-extent(-79.7625, -71.77917, 40.475, 45.01667)
 
-
-data_predict &lt;-predict(all_data, stack_1, progess=&#39;text&#39;, ext=e)
-plot(data_predict)</code></pre>
-<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<pre class="r"><code>#gplot
-
-gplot(data_predict) + geom_tile(aes(fill = value)) +
-  facet_wrap(~ variable) +
-  scale_fill_gradient(low = &#39;white&#39;, high = &#39;red&#39;) +
-  coord_equal()</code></pre>
-<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+data_predict &lt;-predict(all_data, stack_1, progess=&#39;text&#39;, ext=e)</code></pre>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
-<p>Tables and figures (maps and other graphics) are carefully planned to convey the results of your analysis. Intense exploration and evidence of many trials and failures. The author looked at the data in many different ways before coming to the final presentation of the data.</p>
+<pre class="r"><code>plot(stack_1)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>plot(data_predict)</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<pre class="r"><code>gplot(data_predict) + geom_tile(aes(fill = value)) +
+  facet_wrap(~ variable) +
+  scale_fill_gradient(low = &#39;white&#39;, high = &#39;red&#39;) +
+  coord_equal()</code></pre>
+<p><img src="GEO-511-Final-Project_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>

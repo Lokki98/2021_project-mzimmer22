@@ -361,6 +361,7 @@ library(dismo)
 library(ggplot2)
 library(viridis)
 
+
 # cache the results for quick compiling
 options(tigris_use_cache = TRUE)</code></pre>
 </div>
@@ -528,14 +529,24 @@ data_predict &lt;-predict(all_data, stack_1, progess=&#39;text&#39;, ext=e)</cod
   scale_fill_viridis(option=&quot;turbo&quot;) +
   coord_equal()+ ylab(&quot;Latitude&quot;)+ xlab(&quot;Longitude&quot;)+ggtitle(&quot;How Environmental Variables effect Turkey populations within NYS&quot;)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>The final map located above show how the four environmental variables that were chosen for this project affect wild turkey habitat suitability within NYS. It is clear from this map that there are distinct clustered areas of both low and high suitability. Many of the areas with higher suitability seem to be within the range of 0.4-0.6 with very little area within NYS with a suitability score of 0.8 and above. Looking at each individual environmental layer compared to the final map we can observe how areas of lower suitability correlate with higher precipitation, elevation, and tree cover followed by the same areas having lower land cover.</p>
 </div>
 <div id="conclusions" class="section level1">
 <h1>Conclusions</h1>
+<p>These four environmental layers were chosen as being the most influential environmental factors affecting wild turkey populations within NYS. Precipitation have been known to affect nest and poult survival during the breeding periods of wild turkeys. During the first two weeks of a poults life the amount increased precipitation can be fatal for a poult. Tree cover is also an important factor when looking into habitat suitability as turkeys need to roost in a tree every night to stay away from nocturnal predators. Turkeys like to roost in pine trees during the Winter to help stay warm and during the Spring time when their breeding season is in full swing they prefer more open hardwoods to roost in. The third factor land cover was important as turkeys need areas that combine many different land cover aspects within the same area. Turkeys need open areas to forage with an available food source ideally open fields or crop fields. These open areas also double areas where male gobblers can display their feathers during their breeding season. These open fields often are accompanied with nearby areas of secondary succession where the hens feel safe nesting on the ground. The four and final environmental layer that was chosen was elevation. Generally the elevation within NYS is the same for many parts with the exception of the Adirondack region and some other smaller areas within NYS. Turkeys prefer lower elevation as they need those different land cover aspects that were previously talked about. It is hard to find all those land ocver aspects when you begin increasing elevation.</p>
+<p>This project is just the beginning at looking into why NYS wild turkey populations have began to lower over the recent years. From the project results we can determine that areas of lower suitability correlate with higher precipitation, elevation, and tree cover followed by the same areas having lower land cover. More non-environmental variables are needed as the next step into looking at how they effect population levels. Some variables may include; hunting pressure, human disturbance and urban sprawl, and roadways as possible factors that are also contributing to declining population levels.</p>
+<p>This project also provides evidence for future research and funding for habitat restoration for ground nesting birds. By focusing on areas with NYS with lower suitability and improving habitat restoration efforts not only will turkeys be able to reap the benefits but other ground nesting birds will like grouse and pheasant.</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
+<p>Chamberlain, M. J., Cohen, B. S., Bakner, N. W., &amp; Collier, B. A. (2020). Behavior and Movement of Wild Turkey Broods. Journal of Wildlife Management, 84(6), 1139–1152. <a href="https://doi.org/10.1002/jwmg.21883" class="uri">https://doi.org/10.1002/jwmg.21883</a></p>
+<p>eBird. 2021. eBird: An online database of bird distribution and abundance [web application]. eBird, Cornell Lab of Ornithology, Ithaca, New York. Available: <a href="http://www.ebird.org" class="uri">http://www.ebird.org</a>. (Accessed: Date[October 30th, 2021]).</p>
+<p>Gerrits, A. P., Wightman, P. H., Cantrell, J. R., Ruth, C., Chamberlain, M. J., &amp; Collier, B. A. (2020). Movement Ecology of Spring Wild Turkey Hunters on Public Lands in South Carolina, USA. Wildlife Society Bulletin, 44(2), 260–270. <a href="https://doi.org/10.1002/wsb.1094" class="uri">https://doi.org/10.1002/wsb.1094</a></p>
 <p>“Global Forest Change 2000–2020data Download.” Global Forest Change, <a href="https://storage.googleapis.com/earthenginepartners-hansen/GFC-2020-v1.8/download.html" class="uri">https://storage.googleapis.com/earthenginepartners-hansen/GFC-2020-v1.8/download.html</a>.</p>
+<p>Madan, R. T., &amp; Change, P. (2015). Predictors of Wild Turkey ( Meleagris gallopavo ) Population Change in California from 1972 to 2013 Riva T. Madan. 1–42. Retrieved from <a href="https://nature.berkeley.edu/classes/es196/projects/2015final/MadanR_2015.pdf" class="uri">https://nature.berkeley.edu/classes/es196/projects/2015final/MadanR_2015.pdf</a></p>
 <p>PRISM Climate Group, Oregon State U. (n.d.). Prism.oregonstate.edu. <a href="https://prism.oregonstate.edu/recent/monthly.php" class="uri">https://prism.oregonstate.edu/recent/monthly.php</a></p>
+<p>State, N. Y., Sanford, R., Kurt, A., Jurczak, T., Kirsch, A., &amp; Parker, K. (2005). Wild Turkey Management Plan. (July), 1–43. Retrieved from <a href="https://www.dec.ny.gov/docs/wildlife_pdf/turkeyplan.pdf" class="uri">https://www.dec.ny.gov/docs/wildlife_pdf/turkeyplan.pdf</a></p>
+<p>The Sixth National Wild Turkey Symposium. (n.d.). Retrieved from <a href="https://www.fs.fed.us/nrs/pubs/other/1990/ne_1990_healy_001.pdf#page=192" class="uri">https://www.fs.fed.us/nrs/pubs/other/1990/ne_1990_healy_001.pdf#page=192</a></p>
 <p>USGS (1997) USGS 30 ARC-second Global Elevation Data, GTOPO30. (ed. C.a.I.S.L. Research Data Archive at the National Center for Atmospheric Research).</p>
 </div>
 
