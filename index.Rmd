@@ -184,7 +184,7 @@ These four environmental layers were chosen as being the most influential enviro
 
 This project is just the beginning at looking into why NYS wild turkey populations have began to lower over the recent years. From the project results we can determine that areas of lower suitability correlate with higher precipitation, elevation, and tree cover followed by the same areas having lower land cover. More non-environmental variables are needed as the next step into looking at how they effect population levels. Some variables may include; hunting pressure, human disturbance and urban sprawl, and roadways as possible factors that are also contributing to declining population levels. 
 
-This project also provides evidence for future research and funding for habitat restoration for ground nesting birds. By focusing on areas with NYS with lower suitability and improving habitat restoration efforts not only will turkeys be able to reap the benefits but other ground nesting birds will like grouse and pheasant. 
+This project also provides evidence for future research and funding for habitat restoration for ground nesting birds. By focusing on areas with NYS with lower suitability and improving habitat restoration efforts not only will turkeys be able to reap the benefits but other ground nesting birds will like grouse and pheasant.  
 
 # References
 
