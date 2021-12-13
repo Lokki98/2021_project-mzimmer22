@@ -1,5 +1,5 @@
 ---
-title: "How landscape habitat influences wild eastern turkey populations within New York State"
+title: "How landscape habitat influences Wild Eastern Turkey Populations within New York State"
 author: Marissa Zimmer 
 output:
   html_document:
@@ -9,15 +9,19 @@ output:
 
 # Introduction
 
-New York State’s (NYS) wild turkey population constitutes a significant part of conservation concerns and support for the hunting community within NYS. In the early 1950s, the Department of Conservation  (NYSDEC) helped restore and repopulate NYS wild turkey populations. The NYSDEC had also partnered with the National Wild Turkey Federation and SUNY Environmental Science and Forestry college in 2010 to research the impact of weather patterns and hunting zones on turkey populations. The results of this study have not been published at this time.
+New York State’s (NYS) wild turkey population constitutes a significant part of conservation concerns and support for the hunting community within NYS. In the early 1950s, the Department of Conservation (NYSDEC) helped restore and repopulate NYS wild turkey populations. The NYSDEC had also partnered with the National Wild Turkey Federation and SUNY Environmental Science and Forestry college in 2010 to research the impact of weather patterns and hunting zones on turkey populations. The results of this study have not been published at this time.
 
-The aim of this project is to research, gather and compare data that involves understanding and explaining how land cover, tree canopy cover, elevation and precipitation can affect wild turkey population levels. Within NYS many individuals have noticed seeing less wild turkeys than in years past and changing habitat factors in localized areas may be one factor affecting population levels. By looking at these environmantal variables the aim of this project is to see if areas with less suitable environmental variables correlate to areas of lower population levels. If the results of this study come back to support this hypothesis then there is room for continued research into habitat suitability within NYS for wild turkey populations. 
+The aim of this project is to research, gather and compare data that involves understanding and explaining how land cover, tree canopy cover, elevation and precipitation can effect wild turkey population levels. Within NYS, many individuals have noticed seeing less wild turkeys than in years past and changing habitat factors in localized areas may be one factor effecting population levels. By looking at these environmental variables the aim of this project is to see if areas with less suitable environmental variables correlate to areas of lower population levels. If the results of this study come back to support this hypothesis then there is room for continued research into habitat suitability within NYS for wild turkey populations. 
 
 
 
 # Materials and methods
 
-For this project it was important to highlight the key environmental variables that affect wild turkey populations within New York State. Two of the environmental variables that were used, landcover and elevation were taken from the U.S. Geological Survey (USGS). Specifically, the data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer) from several raster and vector sources of information. The USGS seperated the data into tiles on a world map which can be selected by grid. The data for elevation was completed in 1996 and was developed over a three year period. For this project I was able to select a grid tile that included NY. The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis & Discovery. The global tree cover data are per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover from cloud-free annual growing season composite Landset 7 ETM + data. A median from the annual tree canopy cover cover values from 2009-2011 were used to estimate the 2010 tree cover. Like the Landcover data the tree cover canopy data was chosen from a grid style map with a spatial resoultion of 1 arc-second per pixel, approximately 30 m per pixel. The last environmental variable, precipitation was taken from the PRISM Climate Group from Oregon State University. I selected the temporal period May of 2020. The month of May was chosen based on wild eastern Turkeys breeding times. During the month of May their breeding and nesting behaviors peak. 
+For this project it was important to highlight the key environmental variables that effect wild turkey populations within New York State. Two of the environmental variables that were used, landcover and elevation were taken from the U.S. Geological Survey (USGS). Specifically, the data is a global digital elevation model (DEM) with a horizontal grid spacing of 30 arc seconds (approximately 1 kilometer) from several raster and vector sources of information. The USGS separated the data into tiles on a world map which can be selected by individual tile. The data for elevation was completed in 1996 and was developed over a three year period. For this project I was able to select a grid tile that included NY. 
+
+The next environmental variable that was chosen for this project was Tree canopy cover from the Global Land Analysis & Discovery. The global tree cover data is obtained from per pixel estimates of the 2010 percent maximum (peak growing season) tree canopy cover which comes from cloud-free annual growing season composite Land set 7 ETM + data. A median was taken from the annual tree canopy cover values from the years 2009-2011. Like the Land cover and elevation data the tree cover canopy data was chosen from a grid style map with a spatial resolution of 1 arc-second per pixel, approximately 30 m per pixel. 
+
+The last environmental variable, precipitation was taken from the PRISM Climate Group from Oregon State University. I selected the temporal period of May, 2020. The month of May was chosen based on wild eastern Turkeys breeding and nesting times. During the month of May their breeding and nesting behaviors peak. 
 
 
 # Step 1: Loading the required packages 
@@ -74,8 +78,8 @@ precip_cover
 elevation_cover
 ```
 
-Now we need to make all the layers talk to each other 
-I chose to have each layer contain the same properties as the landcover data 
+Now we need to make all the layers talk to each other.
+I chose to have each layer contain the same properties as the land cover data. 
 
 ```{r, message=F, warning=F}
 ny_counties <-counties(state = "NY", cb = FALSE,
@@ -113,7 +117,7 @@ tree_coverny2 = crop(tree_coverny2, extent_1)
 elevation_coverny2 = crop(elevation_coverny2, extent_1)
 ```
 
-Let's relook at all of the environmental layers again and make sure they match:
+Let's relook at all of the environmental layers and make sure they match:
 
 ```{r, message=F, warning=F}
 land_coverny
@@ -122,7 +126,7 @@ precip_coverny2
 elevation_coverny2
 ```
 
-Let's now check and see how each layer plots, including the ebird data
+Let's now check and see how each layer plots, including the ebird data.
 ```{r, message=F, warning=F}
 plot(ebird_data)
 plot(land_coverny)
@@ -132,7 +136,7 @@ plot(elevation_coverny2)
 
 ```
 
-Time to stack now that each layer:
+Each layer (plot) is now able to stack onto each other, as shown below:
 
 ```{r, message=F, warning=F}
 stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%>%
@@ -140,7 +144,7 @@ stack_1= stack(land_coverny,elevation_coverny2,tree_coverny2, precip_coverny2)%>
 ```
 
 
-# Step 3: 
+# Step 3
 ```{r, message=F, warning=F}
 
 
@@ -177,12 +181,12 @@ gplot(data_predict) + geom_tile(aes(fill = value)) +
 
 ```
 
-The final map located above show how the four environmental variables that were chosen for this project affect wild turkey habitat suitability within NYS. It is clear from this map that there are distinct clustered areas of both low and high suitability. Many of the areas with higher suitability seem to be within the range of 0.4-0.6 with very little area within NYS with a suitability score of 0.8 and above. Looking at each individual environmental layer compared to the final map we can observe how areas of lower suitability correlate with higher precipitation, elevation, and tree cover followed by the same areas having lower land cover.   
+The final map located above show how the four environmental variables that were chosen for this project effect wild turkey habitat suitability within NYS. It is clear from this map that there are distinct clustered areas of both low and high suitability. Many of the areas with higher suitability seem to be within the range of 0.4-0.6 with very little area within NYS with a suitability score of 0.8 and above. Looking at each individual environmental layer compared to the final map we can observe how areas of lower suitability correlate with areas of higher precipitation, elevation, and tree cover followed by the same areas having lower land cover results.   
 
 # Conclusions
-These four environmental layers were chosen as being the most influential environmental factors affecting wild turkey populations within NYS. Precipitation have been known to affect nest and poult survival during the breeding periods of wild turkeys. During the first two weeks of a poults life the amount increased precipitation can be fatal for a poult. Tree cover is also an important factor when looking into habitat suitability as turkeys need to roost in a tree every night to stay away from nocturnal predators. Turkeys like to roost in pine trees during the Winter to help stay warm and during the Spring time when their breeding season is in full swing they prefer more open hardwoods to roost in. The third factor land cover was important as turkeys need areas that combine many different land cover aspects within the same area. Turkeys need open areas to forage with an available food source ideally open fields or crop fields. These open areas also double areas where male gobblers can display their feathers during their breeding season. These open fields often are accompanied with nearby areas of secondary succession where the hens feel safe nesting on the ground. The four and final environmental layer that was chosen was elevation. Generally the elevation within NYS is the same for many parts with the exception of the Adirondack region and some other smaller areas within NYS. Turkeys prefer lower elevation as they need those different land cover aspects that were previously talked about. It is hard to find all those land ocver aspects when you begin increasing elevation.
+These four environmental layers were chosen as being the most influential environmental factors effecting wild turkey populations within NYS. Precipitation have been known to effect nest and poult survival during the breeding periods of wild turkeys. During the first two weeks of a poults life increased precipitation can be fatal for a poult. Tree cover is also an important factor when looking into habitat suitability as turkeys need to roost in a tree every night to stay away from nocturnal predators. Turkeys like to roost in pine trees during the Winter to help stay warm and, during the Spring time when their breeding season is in full swing, they prefer more open hardwoods to roost in. The third factor, land cover was important as turkeys need areas that combine many different land cover aspects within the same area. Turkeys need open areas to forage with an available food source, ideally open fields or crop fields. These open areas also double as areas where male gobblers can display their feathers during their breeding season to attract a hen. These open fields often are accompanied with nearby areas of secondary succession where the hens feel safe nesting on the ground. The fourth and final environmental layer that was chosen was elevation. Generally the elevation within NYS is the same for many parts with the exception of the Adirondack region and some other smaller areas within NYS. Turkeys prefer lower elevation as they need those different land cover aspects that were previously talked about. It is hard to find all those land cover aspects when you begin increasing elevation.
 
-This project is just the beginning at looking into why NYS wild turkey populations have began to lower over the recent years. From the project results we can determine that areas of lower suitability correlate with higher precipitation, elevation, and tree cover followed by the same areas having lower land cover. More non-environmental variables are needed as the next step into looking at how they effect population levels. Some variables may include; hunting pressure, human disturbance and urban sprawl, and roadways as possible factors that are also contributing to declining population levels. 
+This project is just the beginning at looking into why NYS wild turkey populations have began to lower over the recent years. From this project, results we can determine that areas of lower suitability correlate with higher precipitation, elevation, and tree cover followed by the same areas having lower land cover. More non-environmental variables are needed as the next step into looking at how they effect population levels. Some variables may include; hunting pressure, human disturbance and urban sprawl as possible factors that are also contributing to declining population levels. 
 
 This project also provides evidence for future research and funding for habitat restoration for ground nesting birds. By focusing on areas with NYS with lower suitability and improving habitat restoration efforts not only will turkeys be able to reap the benefits but other ground nesting birds will like grouse and pheasant.  
 
