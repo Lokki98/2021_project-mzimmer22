@@ -126,7 +126,7 @@ precip_coverny2
 elevation_coverny2
 ```
 
-Let's now check and see how each layer plots, including the ebird data.
+Let's now check and see how each layer plots, including the ebird data. 
 ```{r, message=F, warning=F}
 plot(ebird_data)
 plot(land_coverny)
